@@ -1,0 +1,22 @@
+{
+  "users": [
+    {
+      "id": "550d",
+      "name": "Postgres Local",
+      "email": "mariemzili.work@gmail.com",
+      "password": "Usmonastir0"
+    },
+    {
+      "id": 1,
+      "email": "user@example.com",
+      "password": "password123",
+      "token": "dummy-token-12345"
+    },
+    {
+      "id": "297e",
+      "name": "Postgres Local",
+      "email": "mariemzili.work@gmail.com",
+      "password": "abcd792002"
+    }
+  ]
+}
