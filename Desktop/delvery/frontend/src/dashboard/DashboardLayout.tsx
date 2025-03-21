@@ -1,11 +1,9 @@
 
 
-const DashboardHome = () => {
+const DashboardLayout = () => {
   return (
-   
-      <h1>Bienvenue sur le tableau de bord</h1>
-    
-  );
-};
+    <div>DashboardLayout</div>
+  )
+}
 
-export default DashboardHome;
+export default DashboardLayout

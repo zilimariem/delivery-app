@@ -1,11 +1,11 @@
-import { Outlet } from "react-router-dom";
-import MiniDrawer from "../components/DashbordComponets/MiniDrawer";
+
+import MiniDrawer from "../components/DashbordComponents/MiniDrawer";
 
 const DashboardHome = () => {
   return (
     <div>
       <MiniDrawer />
-      <Outlet />
+      
     </div>
   );
 };

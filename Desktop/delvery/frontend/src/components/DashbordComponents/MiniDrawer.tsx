@@ -1,0 +1,58 @@
+// import React from "react";
+// import { Box, CssBaseline } from "@mui/material";
+// import TopBar from "./TopBar";
+// import SideBar from "./SideBar";
+
+// const MiniDrawer: React.FC = () => {
+//   const [open, setOpen] = React.useState(false);
+
+//   const handleDrawerOpen = () => {
+//     setOpen(true);
+//   };
+
+//   const handleDrawerClose = () => {
+//     setOpen(false);
+//   };
+
+//   return (
+//     <Box sx={{ display: "flex" }}>
+//       <CssBaseline />
+//       <TopBar open={open} handleDrawerOpen={handleDrawerOpen} />
+//       <SideBar open={open} handleDrawerClose={handleDrawerClose} />
+//       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+//         <div style={{ marginTop: "64px" }} />
+//         {/* Le contenu des pages enfants sera injecté ici via Outlet */}
+//       </Box>
+//     </Box>
+//   );
+// };
+
+// export default MiniDrawer;
+
+import React from "react";
+import { Box, CssBaseline } from "@mui/material";
+import TopBar from "./TopBar";
+import SideBar from "./SideBar";
+import { Outlet } from "react-router-dom"; 
+const MiniDrawer: React.FC = () => {
+  return (
+    <Box sx={{ display: "flex" }}>
+      <CssBaseline />
+      <TopBar />
+      <SideBar />
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          marginLeft: "240px", // Décalage pour la barre latérale
+          marginTop: "64px", // Décalage pour la barre supérieure
+        }}
+      >
+        <Outlet /> {/* Affiche le contenu des pages enfants */}
+      </Box>
+    </Box>
+  );
+};
+
+export default MiniDrawer;

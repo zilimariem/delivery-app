@@ -22,3 +22,19 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Ignorer les fichiers sensibles
+*.env
+*.sqlite
+db.json
+
+# Ignorer les fichiers de build
+build/
+
+# Ignorer les fichiers de cache et de couverture de tests
+.cache/
+coverage/
+
+# Ignorer les fichiers système Windows
+Thumbs.db
+

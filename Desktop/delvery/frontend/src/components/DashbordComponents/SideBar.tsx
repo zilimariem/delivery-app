@@ -86,8 +86,8 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  IconButton,
   Typography,
+  useTheme,
 } from "@mui/material";
 import {
   DashboardOutlined,
@@ -95,16 +95,9 @@ import {
   LocalShippingOutlined,
   StorefrontOutlined,
   AssignmentOutlined,
-  ChevronLeft,
-  ChevronRight,
 } from "@mui/icons-material";
-import { styled, useTheme } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
-
-interface SideBarProps {
-  open: boolean;
-  handleDrawerClose: () => void;
-}
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
@@ -114,7 +107,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   ...theme.mixins.toolbar,
 }));
 
-const SideBar: React.FC<SideBarProps> = ({ open, handleDrawerClose }) => {
+const SideBar: React.FC = () => {
   const theme = useTheme();
   const navigate = useNavigate();
 
@@ -139,18 +132,33 @@ const SideBar: React.FC<SideBarProps> = ({ open, handleDrawerClose }) => {
   ];
 
   return (
-    <Drawer variant="permanent" open={open}>
-      <DrawerHeader>
-        <IconButton onClick={handleDrawerClose}>
-          {theme.direction === "rtl" ? <ChevronRight /> : <ChevronLeft />}
-        </IconButton>
-      </DrawerHeader>
+    <Drawer
+      variant="permanent"
+      open={true}
+      sx={{
+        width: 240,
+        flexShrink: 0,
+        "& .MuiDrawer-paper": {
+          width: 240,
+          boxSizing: "border-box",
+          backgroundColor: theme.palette.background.paper,
+        },
+      }}
+    >
+      <DrawerHeader>{/* Supprimer le bouton de fermeture */}</DrawerHeader>
 
       <Divider />
-      <Typography align="center" sx={{ fontSize: open? 17: 0  , transition: "all 0.25s" }}>
+      <Typography align="center" sx={{ fontSize: 17, transition: "all 0.25s" }}>
         Mariem
       </Typography>
-      <Typography align="center" sx={{ fontSize:open? 15 :0 , transition: "all 0.25s" , color: theme.palette.info.main }}>
+      <Typography
+        align="center"
+        sx={{
+          fontSize: 15,
+          transition: "all 0.25s",
+          color: theme.palette.info.main,
+        }}
+      >
         Admin
       </Typography>
       <Divider />
@@ -161,22 +169,23 @@ const SideBar: React.FC<SideBarProps> = ({ open, handleDrawerClose }) => {
               onClick={() => navigate(item.path)}
               sx={{
                 minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
+                justifyContent: "flex-start",
+                px: 3,
               }}
             >
               <ListItemIcon
                 sx={{
                   minWidth: 0,
-                  mr: open ? 3 : "auto",
+                  mr: 3,
                   justifyContent: "center",
+                  color: theme.palette.text.primary,
                 }}
               >
                 {item.icon}
               </ListItemIcon>
               <ListItemText
                 primary={item.text}
-                sx={{ opacity: open ? 1 : 0 }}
+                sx={{ opacity: 1, color: theme.palette.text.primary }}
               />
             </ListItemButton>
           </ListItem>
