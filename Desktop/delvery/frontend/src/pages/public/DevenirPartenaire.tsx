@@ -271,14 +271,14 @@ import { useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { usePostPartenaire } from "../api/partenaireApi";
+import { usePostPartenaire } from "../../api/partenaireApi";
 import Swal from "sweetalert2";
 
 // Schéma de validation avec Zod
 const partenaireSchema = z.object({
   establishmentName: z
     .string()
-    .min(3, "Le nom doit contenir au moins 3 caractères."),
+    .min(1, "Le nom doit contenir au moins 1 caractères."),
   sector: z.enum(
     [
       "Restaurant",
@@ -295,8 +295,8 @@ const partenaireSchema = z.object({
   establishmentType: z.enum(["service_seulement", "livraison_service"], {
     message: "Type d'établissement requis",
   }),
-  firstName: z.string().min(1, "Prénom requis"),
-  lastName: z.string().min(1, "Nom requis"),
+  firstName: z.string().min(3, "Prénom requis"),
+  lastName: z.string().min(3, "Nom requis"),
   telephone: z
     .string()
     .length(8, "Le numéro doit contenir exactement 8 chiffres."),
@@ -375,10 +375,17 @@ const DevenirPartenaire = () => {
           control={control}
           render={({ field }) => (
             <Select {...field}>
-              <MenuItem value="Restaurant">Restaurant</MenuItem>
+              <MenuItem value="Restaurant">
+                Restaurant (café, glaces, jus et smoothies...)
+              </MenuItem>
               <MenuItem value="pharmacie">Pharmacie</MenuItem>
-              <MenuItem value="magasin_detail">Magasin de détail</MenuItem>
-              <MenuItem value="epicerie">Épicerie</MenuItem>
+              <MenuItem value="magasin_detail">
+                Magasin de détail (brunch et boulangerie, cadeaux, beauté,
+                électronique, animalerie...)
+              </MenuItem>
+              <MenuItem value="epicerie">
+                Épicerie (supermarchés, confiseries)
+              </MenuItem>
               <MenuItem value="fleuriste">Fleuriste</MenuItem>
               <MenuItem value="autre">Autre</MenuItem>
             </Select>
@@ -426,17 +433,6 @@ const DevenirPartenaire = () => {
         helperText={errors.lastName?.message}
         sx={{ mb: 2 }}
       />
-      {/* 
-      <TextField
-        label="Téléphone"
-        type="tel"
-        fullWidth
-        margin="normal"
-        {...register("telephone")}
-        error={!!errors.telephone}
-        helperText={errors.telephone?.message}
-        sx={{ mb: 2 }}
-      /> */}
 
       <TextField
         label="Téléphone"
@@ -444,10 +440,10 @@ const DevenirPartenaire = () => {
         {...register("telephone", {
           required: "Le numéro est requis.",
           pattern: {
-            value: /^\d{8}$/, // Valide un numéro de 8 chiffres uniquement
+            value: /^\d{8}$/,
             message: "Le numéro doit contenir exactement 8 chiffres.",
           },
-          setValueAs: (value) => value.replace(/[^\d]/g, ""), // Remplace tout caractère non numérique
+          setValueAs: (value) => value.replace(/[^\d]/g, ""),
         })}
         fullWidth
         margin="normal"

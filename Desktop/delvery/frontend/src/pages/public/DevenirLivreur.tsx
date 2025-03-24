@@ -579,8 +579,12 @@
 
 // export default DevenirLivreur;
 
+"use client";
+
 import { useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import {
   TextField,
   Button,
@@ -596,10 +600,33 @@ import {
   Select,
   MenuItem,
   InputLabel,
+  FormHelperText,
 } from "@mui/material";
-import { LivreurData } from "../api/livreurApi";
 import Swal from "sweetalert2";
-import { usePostLivreur } from "../api/livreurApi";
+import { usePostLivreur, type LivreurData } from "../../api/livreurApi";
+
+// Schéma de validation Zod
+const livreurSchema = z.object({
+  firstName: z
+    .string()
+    .min(3, "Le prénom doit contenir au moins 3 caractères."),
+  lastName: z.string().min(3, "Le nom doit contenir au moins 3 caractères."),
+  email: z.string().email("L'adresse e-mail n'est pas valide."),
+  
+  telephone: z
+    .string()
+    .min(8, "Le numéro doit contenir exactement 8 chiffres.")
+    .max(8, "Le numéro doit contenir exactement 8 chiffres.")
+    .regex(/^\d+$/, "Le numéro doit contenir uniquement des chiffres."),
+  gender: z.enum(["Homme", "Femme"]),
+  city: z.string().min(1, "Veuillez choisir une ville."),
+  cv: z
+    .instanceof(FileList)
+    .refine((files) => files?.length > 0, "Veuillez télécharger un CV."),
+  transportMethod: z.enum(["voiture", "bicyclette", "moto"]),
+});
+
+type LivreurFormData = z.infer<typeof livreurSchema>;
 
 const DevenirLivreur = () => {
   const navigate = useNavigate();
@@ -610,7 +637,8 @@ const DevenirLivreur = () => {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<LivreurData>({
+  } = useForm<LivreurFormData>({
+    resolver: zodResolver(livreurSchema),
     defaultValues: {
       gender: "Homme",
       transportMethod: "voiture",
@@ -618,10 +646,17 @@ const DevenirLivreur = () => {
     },
   });
 
-  const onSubmit = async (data: LivreurData) => {
+  const onSubmit = async (data: LivreurFormData) => {
     try {
-      console.log("Données du formulaire :", data); // Ajout du console.log
-      await mutation.mutateAsync(data);
+      console.log("Données du formulaire :", data);
+
+      // Transformer les données pour correspondre à l'interface LivreurData
+      const livreurData: LivreurData = {
+        ...data,
+        cv: data.cv[0], // Prendre le premier fichier de FileList
+      };
+
+      await mutation.mutateAsync(livreurData);
 
       Swal.fire({
         icon: "success",
@@ -683,36 +718,30 @@ const DevenirLivreur = () => {
       <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
         <TextField
           label="Nom"
-          {...register("lastName", { required: "Le nom est requis." })}
+          {...register("lastName")}
           fullWidth
           margin="normal"
           error={!!errors.lastName}
-          helperText={errors.lastName?.message as string}
+          helperText={errors.lastName?.message}
         />
         <TextField
           label="Prénom"
-          {...register("firstName", { required: "Le prénom est requis." })}
+          {...register("firstName")}
           fullWidth
           margin="normal"
           error={!!errors.firstName}
-          helperText={errors.firstName?.message as string}
+          helperText={errors.firstName?.message}
         />
       </Stack>
 
       <TextField
         label="Email"
         type="email"
-        {...register("email", {
-          required: "L'adresse e-mail est requise.",
-          pattern: {
-            value: /^\S+@\S+\.\S+$/,
-            message: "L'adresse e-mail n'est pas valide.",
-          },
-        })}
+        {...register("email")}
         fullWidth
         margin="normal"
         error={!!errors.email}
-        helperText={errors.email?.message as string}
+        helperText={errors.email?.message}
       />
 
       <TextField
@@ -749,14 +778,12 @@ const DevenirLivreur = () => {
         <Controller
           name="gender"
           control={control}
-          rules={{ required: "Veuillez sélectionner un genre." }}
           render={({ field }) => (
             <RadioGroup {...field} row>
               <FormControlLabel
                 value="Homme"
                 control={<Radio />}
                 label="Homme"
-                checked
               />
               <FormControlLabel
                 value="Femme"
@@ -767,9 +794,9 @@ const DevenirLivreur = () => {
           )}
         />
         {errors.gender && (
-          <Typography color="error">
+          <FormHelperText error>
             {errors.gender.message as string}
-          </Typography>
+          </FormHelperText>
         )}
       </FormControl>
 
@@ -778,9 +805,8 @@ const DevenirLivreur = () => {
         <Controller
           name="city"
           control={control}
-          rules={{ required: "Veuillez choisir une ville." }}
           render={({ field }) => (
-            <Select {...field}>
+            <Select {...field} label="Ville">
               {villes.map((ville) => (
                 <MenuItem key={ville} value={ville}>
                   {ville}
@@ -790,29 +816,19 @@ const DevenirLivreur = () => {
           )}
         />
         {errors.city && (
-          <Typography color="error">{errors.city.message as string}</Typography>
+          <FormHelperText error>{errors.city.message as string}</FormHelperText>
         )}
       </FormControl>
 
-      <Button variant="contained" component="label" sx={{ mt: 2, mb: 2 }}>
-        Télécharger CV
-        <input
-          type="file"
-          hidden
-          {...register("cv", {
-            required: "Veuillez télécharger un CV.",
-            validate: (value) => {
-              if (value[0] && value[0].type !== "application/pdf") {
-                return "Le fichier doit être un PDF.";
-              }
-              return true;
-            },
-          })}
-        />
-      </Button>
-      {errors.cv && (
-        <Typography color="error">{errors.cv.message as string}</Typography>
-      )}
+      <FormControl fullWidth margin="normal" error={!!errors.cv}>
+        <Button variant="contained" component="label" sx={{ mt: 2, mb: 2 }}>
+          Télécharger CV
+          <input type="file" hidden {...register("cv")} accept="*/*" />
+        </Button>
+        {errors.cv && (
+          <FormHelperText error>{errors.cv.message as string}</FormHelperText>
+        )}
+      </FormControl>
 
       <FormControl
         component="fieldset"
@@ -823,7 +839,6 @@ const DevenirLivreur = () => {
         <Controller
           name="transportMethod"
           control={control}
-          rules={{ required: "Veuillez sélectionner un moyen de transport." }}
           render={({ field }) => (
             <RadioGroup {...field} row>
               <FormControlLabel
@@ -841,9 +856,9 @@ const DevenirLivreur = () => {
           )}
         />
         {errors.transportMethod && (
-          <Typography color="error">
+          <FormHelperText error>
             {errors.transportMethod.message as string}
-          </Typography>
+          </FormHelperText>
         )}
       </FormControl>
 

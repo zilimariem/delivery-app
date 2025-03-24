@@ -94,8 +94,8 @@ import {
   PeopleOutline,
   LocalShippingOutlined,
   StorefrontOutlined,
-  AssignmentOutlined,
 } from "@mui/icons-material";
+import PersonAddAlt1OutlinedIcon from "@mui/icons-material/PersonAddAlt1Outlined"; // Nouvelle icône
 import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 
@@ -115,6 +115,16 @@ const SideBar: React.FC = () => {
     { text: "Dashboard", icon: <DashboardOutlined />, path: "/dashboard" },
     { text: "Clients", icon: <PeopleOutline />, path: "/dashboard/clients" },
     {
+      text: "Candidats Livreurs",
+      icon: <PersonAddAlt1OutlinedIcon />, // Nouvelle icône
+      path: "/dashboard/candidats-livreurs",
+    },
+    {
+      text: "Candidats Partenaires",
+      icon: <PersonAddAlt1OutlinedIcon />, // Nouvelle icône
+      path: "/dashboard/candidats-partenaires",
+    },
+    {
       text: "Livreurs",
       icon: <LocalShippingOutlined />,
       path: "/dashboard/livreurs",
@@ -123,11 +133,6 @@ const SideBar: React.FC = () => {
       text: "Partenaires",
       icon: <StorefrontOutlined />,
       path: "/dashboard/partenaires",
-    },
-    {
-      text: "Demandes",
-      icon: <AssignmentOutlined />,
-      path: "/dashboard/demandes",
     },
   ];
 

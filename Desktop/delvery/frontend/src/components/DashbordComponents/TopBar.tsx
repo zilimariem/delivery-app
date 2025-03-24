@@ -145,7 +145,7 @@ import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import NightlightOutlinedIcon from "@mui/icons-material/NightlightOutlined";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import Person2OutlinedIcon from "@mui/icons-material/Person2Outlined";
-import { useAppDarkMode } from "../../App";
+import { useThemeContext } from "../../theme/themeCotext"; // Use theme context instead of DashboardContext
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -187,7 +187,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const TopBar: React.FC = () => {
-  const { darkMode, toggleDarkMode } = useAppDarkMode();
+  const { darkMode, toggleDarkMode } = useThemeContext(); // Use theme context
   const theme = useTheme();
 
   return (
@@ -216,7 +216,7 @@ const TopBar: React.FC = () => {
         <Box flexGrow={1} />
         <IconButton
           color="inherit"
-          onClick={toggleDarkMode}
+          onClick={toggleDarkMode} // Toggle theme
           sx={{
             transition: "transform 0.3s ease-in-out",
             "&:hover": { transform: "rotate(30deg)" },

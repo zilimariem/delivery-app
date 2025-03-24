@@ -119,15 +119,27 @@
 
 // export default Register;
 
+
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { TextField, Button, Box, Typography } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Box,
+  Typography,
+  IconButton,
+  InputAdornment,
+} from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
-import { registerUser } from "../api/authApi";
+import { registerUser } from "../../api/authApi";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
+import { useState } from "react";
 
 // 🛠 Définition du schéma de validation avec mot de passe renforcé
 const registerSchema = z
@@ -161,6 +173,15 @@ const Register = () => {
   } = useForm<FormData>({
     resolver: zodResolver(registerSchema),
   });
+
+  // State to manage password visibility
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmedPassword, setShowConfirmedPassword] = useState(false);
+
+  // Toggle password visibility
+  const handleClickShowPassword = () => setShowPassword((prev) => !prev);
+  const handleClickShowConfirmedPassword = () =>
+    setShowConfirmedPassword((prev) => !prev);
 
   const mutation = useMutation({
     mutationFn: (data: Omit<FormData, "confirmedPassword">) =>
@@ -208,21 +229,50 @@ const Register = () => {
         />
         <TextField
           label="Mot de passe"
-          type="password"
+          type={showPassword ? "text" : "password"}
           fullWidth
           margin="normal"
           {...register("password")}
           error={!!errors.password}
           helperText={errors.password?.message}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={handleClickShowPassword} edge="end">
+                  {showPassword ? (
+                    <VisibilityOffOutlinedIcon />
+                  ) : (
+                    <VisibilityOutlinedIcon />
+                  )}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
         <TextField
           label="Confirmer le mot de passe"
-          type="password"
+          type={showConfirmedPassword ? "text" : "password"}
           fullWidth
           margin="normal"
           {...register("confirmedPassword")}
           error={!!errors.confirmedPassword}
           helperText={errors.confirmedPassword?.message}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={handleClickShowConfirmedPassword}
+                  edge="end"
+                >
+                  {showConfirmedPassword ? (
+                    <VisibilityOffOutlinedIcon />
+                  ) : (
+                    <VisibilityOutlinedIcon />
+                  )}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
         <Button
           type="submit"

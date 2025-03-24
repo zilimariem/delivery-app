@@ -59,6 +59,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       const response = await loginUser(credentials);
       localStorage.setItem("token", response.token);
+      localStorage.setItem("user", JSON.stringify(response.user));
       setUser(response.user);
       setIsLoggedIn(true);
     } catch (error) {
@@ -74,6 +75,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       const response = await registerUser(userData);
       localStorage.setItem("token", response.token);
+      localStorage.setItem("user", JSON.stringify(response.user));
       setUser(response.user);
       setIsLoggedIn(true);
     } catch (error) {

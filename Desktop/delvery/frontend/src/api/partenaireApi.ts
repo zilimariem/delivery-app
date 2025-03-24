@@ -48,9 +48,9 @@
 //   });
 // };
 
-
 import apiClient from "./apiClient";
 import { useMutation } from "@tanstack/react-query";
+
 export interface PartenaireData {
   establishmentName: string;
   sector: string;
@@ -64,10 +64,19 @@ export interface PartenaireData {
 }
 
 const postPartenaire = async (data: PartenaireData) => {
-  await apiClient.post("/users/company-application", data);
+  // Adapter les types pour le backend
+  const formattedData = {
+    ...data,
+    establishmentType:
+      data.establishmentType === "service_seulement"
+        ? "deliveryonly"
+        : "fullservice",
+  };
+
+  await apiClient.post("/users/company-application", formattedData);
 };
 
-// Hook pour l'utilisation dans le composant
+// Hook pour le composant
 export const usePostPartenaire = () => {
   return useMutation({
     mutationFn: postPartenaire,

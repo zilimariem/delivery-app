@@ -33,24 +33,17 @@ import React from "react";
 import { Box, CssBaseline } from "@mui/material";
 import TopBar from "./TopBar";
 import SideBar from "./SideBar";
-import { Outlet } from "react-router-dom"; 
+
+
 const MiniDrawer: React.FC = () => {
+   // Utilisez DashboardContext
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <TopBar />
       <SideBar />
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          marginLeft: "240px", // Décalage pour la barre latérale
-          marginTop: "64px", // Décalage pour la barre supérieure
-        }}
-      >
-        <Outlet /> {/* Affiche le contenu des pages enfants */}
-      </Box>
+  
     </Box>
   );
 };

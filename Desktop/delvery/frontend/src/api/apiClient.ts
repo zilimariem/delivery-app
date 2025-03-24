@@ -40,7 +40,7 @@ import axios from "axios";
 
 // Remplacez par l'adresse IPv4 du PC du backend
 const apiClient = axios.create({
-  baseURL: "http://102.157.85.24:3000", // Exemple : http://192.168.1.100:3000
+  baseURL: "http://192.168.1.69:3000", // Exemple : http://192.168.1.100:3000
   headers: {
     "Content-Type": "application/json",
   },

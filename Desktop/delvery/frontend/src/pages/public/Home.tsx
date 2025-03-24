@@ -1,5 +1,5 @@
-import Navbar from "../components/Navbar";
-import CardOption from "../components/CardOption";
+import Navbar from "../../components/Common/Navbar";
+import CardOption from "../../components/Common/CardOption";
 import { Box, Grid } from "@mui/material";
 
 const Home = () => {
@@ -9,11 +9,13 @@ const Home = () => {
 
       {/* 🌄 Image principale */}
       <img
-        src="https://blog-assets.lightspeedhq.com/img/2021/04/93ac0f0b-how-to-manage-delivery-platforms-fr.jpg"
+        src="/src/assets/img_couverture.png"
         alt="Image de livraison"
         style={{
-          width: "100%",
-          objectFit: "cover", // Cette propriété garantit que l'image couvre l'espace sans se déformer
+          width: "100%", // L'image prend toute la largeur du conteneur
+          height: "auto", // La hauteur s'ajuste automatiquement pour garder les proportions
+          objectFit: "cover", // Assure que l'image couvre toute la zone sans se déformer
+          maxHeight: "500px", // Limite la hauteur maximale pour les grands écrans
         }}
       />
 
@@ -23,7 +25,7 @@ const Home = () => {
             title="Devenir Livreur"
             description="Rejoignez notre équipe et commencez à livrer dès aujourd'hui !"
             buttonText="S'inscrire"
-            image="https://www.digimoov.fr/digimoov_website_templates/static/img/ubereats/devenz-coursier-uber-eats.png"
+            image="/src/assets/liv.png"
             link="/devenir-livreur"
           />
         </Grid>
@@ -32,7 +34,7 @@ const Home = () => {
             title="Devenir Partenaire"
             description="Développez votre activité en collaborant avec nous."
             buttonText="S'inscrire"
-            image="https://cdn-icons-png.flaticon.com/512/4072/4072864.png"
+            image="/src/assets/part.png"
             link="/devenir-partenaire"
           />
         </Grid>

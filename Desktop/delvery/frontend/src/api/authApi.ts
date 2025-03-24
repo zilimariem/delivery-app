@@ -100,8 +100,13 @@ export interface AuthResponse {
     id: string;
     name: string;
     email: string;
-    // Add other user properties as needed
+    role: string; // Ajoutez cette ligne
   };
+}
+
+export interface SetPasswordData {
+  token: string;
+  password: string;
 }
 
 /**
@@ -135,13 +140,27 @@ export const registerUser = async (
 };
 
 /**
+ * Set password after account activation
+ * @param setPasswordData Token and new password
+ * @returns Success message or error
+ */
+export const setPassword = async (
+  setPasswordData: SetPasswordData
+): Promise<{ message: string }> => {
+  const response = await apiClient.post<{ message: string }>(
+    "/auth/set-password",
+    setPasswordData
+  );
+  return response.data;
+};
+
+/**
  * Logout user function
  * Clears the authentication token and any user data
  */
 export const logoutUser = (): void => {
   localStorage.removeItem("token");
-  // You can add additional cleanup here if needed
-  // For example, clearing user data from state management
+  localStorage.removeItem("user");
 };
 
 /**
